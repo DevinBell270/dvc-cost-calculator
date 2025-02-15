@@ -27,7 +27,7 @@
                     <div class="input-group-prepend">
                         <span class="input-group-text">$</span>
                     </div>
-                    <input type="number" class="form-control" id="total-contract-price" placeholder="Enter total contract price" required min="0">
+                    <input type="text" class="form-control" id="total-contract-price" placeholder="Enter total contract price" required>
                 </div>
             </div>
 
@@ -47,10 +47,10 @@
                   <div class="input-group-prepend">
                     <span class="input-group-text">$</span>
                 </div>
-                <input type="number" class="form-control" id="dues-per-point" placeholder="Enter dues per point" required min="0" step="0.01">
+                <input type="text" class="form-control" id="dues-per-point" placeholder="Enter dues per point" required>
                 </div>
             </div>
-          
+
             <div class="form-group">
                 <label for="contract-length">Contract Length (Years):</label>
                 <div class="input-group">
@@ -111,14 +111,15 @@
 
     <script>
         function calculateDVCCost() {
-            // Get input values
-            const totalContractPrice = parseFloat(document.getElementById('total-contract-price').value);
+            // Get and sanitize input values
+            const totalContractPrice = parseCurrency(document.getElementById('total-contract-price').value);
             const numPoints = parseInt(document.getElementById('num-points').value);
-            const duesPerPoint = parseFloat(document.getElementById('dues-per-point').value);
+            const duesPerPoint = parseCurrency(document.getElementById('dues-per-point').value);
             const contractLength = parseInt(document.getElementById('contract-length').value);
             const financing = document.getElementById('financing').value;
             const interestRate = (financing === 'yes') ? parseFloat(document.getElementById('interest-rate').value) / 100 : 0;
             const loanTerm = (financing === 'yes') ? parseInt(document.getElementById('loan-term').value) : 0;
+
 
             // Input validation
             if (isNaN(totalContractPrice) || totalContractPrice < 0) { alert("Please enter a valid total contract price."); return; }
@@ -131,42 +132,43 @@
             }
 
             // Calculations
-            let totalInterest = 0;
+             let totalInterest = 0;
             let monthlyPayment = 0;
             let finalContractCost = totalContractPrice; // Initialize with the base contract price
 
             if (financing === 'yes') {
                 const monthlyInterestRate = interestRate / 12;
                 const numPayments = loanTerm * 12;
-                if(interestRate > 0) {
-                    monthlyPayment = (totalContractPrice * monthlyInterestRate) / (1 - Math.pow(1 + monthlyInterestRate, -numPayments));
-                    totalInterest = (monthlyPayment * numPayments) - totalContractPrice;
-                    finalContractCost += totalInterest; // Add interest to get the final contract cost
 
+                if(interestRate > 0){
+                monthlyPayment = (totalContractPrice * monthlyInterestRate) / (1 - Math.pow(1 + monthlyInterestRate, -numPayments));
+                totalInterest = (monthlyPayment * numPayments) - totalContractPrice;
+                 finalContractCost += totalInterest; // Add interest to get the final contract cost
                 } else {
-                     monthlyPayment = totalContractPrice / numPayments; // 0% interest
-                      finalContractCost = totalContractPrice;
+                    monthlyPayment = totalContractPrice / numPayments;
+                     finalContractCost = totalContractPrice;
                 }
 
 
                 document.getElementById('total-interest-container').style.display = 'block';
                 document.getElementById('monthly-payment-container').style.display = 'block';
-                document.getElementById('total-interest').textContent = `$${totalInterest.toFixed(2)}`;
-                document.getElementById('monthly-payment').textContent = `$${monthlyPayment.toFixed(2)}`;
+                document.getElementById('total-interest').textContent = `$${formatCurrency(totalInterest)}`;
+                document.getElementById('monthly-payment').textContent = `$${formatCurrency(monthlyPayment)}`;
             } else {
                 document.getElementById('total-interest-container').style.display = 'none';
                 document.getElementById('monthly-payment-container').style.display = 'none';
             }
-            const contractCostPerPointPerYear = finalContractCost/ contractLength / numPoints;
+
+           const contractCostPerPointPerYear = finalContractCost/ contractLength / numPoints;
             const finalCostPerPointPerYear = contractCostPerPointPerYear + duesPerPoint;
 
             // Display results
             document.getElementById('results').style.display = 'block';
-            document.getElementById('final-cost-per-point').textContent = `$${finalCostPerPointPerYear.toFixed(2)}`;
-             document.getElementById('total-contract-cost').textContent = `$${finalContractCost.toFixed(2)}`;
-             document.getElementById('dues-cost-per-point').textContent = `$${duesPerPoint.toFixed(2)}`;
-
+            document.getElementById('final-cost-per-point').textContent = `$${formatCurrency(finalCostPerPointPerYear)}`;
+            document.getElementById('total-contract-cost').textContent = `$${formatCurrency(finalContractCost)}`;
+             document.getElementById('dues-cost-per-point').textContent = `$${formatCurrency(duesPerPoint)}`;
         }
+
 
          // Show/hide financing details based on dropdown selection
         document.getElementById('financing').addEventListener('change', function() {
@@ -177,6 +179,17 @@
                 financingDetails.style.display = 'none';
             }
         });
+
+    //Helper functions
+      function parseCurrency(value) {
+        // Remove $ and , characters
+        const cleanedValue = value.replace(/[\$,]/g, '');
+        return parseFloat(cleanedValue);
+    }
+      function formatCurrency(number) {
+        return number.toFixed(2).replace(/\d(?=(\d{3})+\.)/g, '$&,');
+    }
+
     </script>
 
     <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
