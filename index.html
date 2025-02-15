@@ -16,21 +16,20 @@
 </head>
 <body>
     <div class="container">
-        <h1>DVC Cost Per Point Calculator (Revised)</h1>
+        <h1>DVC Cost Per Point Calculator (Revised Again)</h1>
 
-        <p>This calculator provides a more refined cost-per-point calculation, factoring in financing per the prompt's updated requirements.</p>
+        <p>Calculates the cost per point, considering financing and annual dues, with a yearly cost breakdown.</p>
 
         <form id="dvc-calculator-form">
-           <div class="form-group">
-                <label for="price-per-point">Price Per Point:</label>
+            <div class="form-group">
+                <label for="total-contract-price">Total Contract Price:</label>
                 <div class="input-group">
                     <div class="input-group-prepend">
                         <span class="input-group-text">$</span>
                     </div>
-                    <input type="number" class="form-control" id="price-per-point" placeholder="Enter price per point" required min="0" step="0.01">
+                    <input type="number" class="form-control" id="total-contract-price" placeholder="Enter total contract price" required min="0">
                 </div>
             </div>
-
 
             <div class="form-group">
                 <label for="num-points">Number of Points:</label>
@@ -51,7 +50,7 @@
                 <input type="number" class="form-control" id="dues-per-point" placeholder="Enter dues per point" required min="0" step="0.01">
                 </div>
             </div>
-            
+          
             <div class="form-group">
                 <label for="contract-length">Contract Length (Years):</label>
                 <div class="input-group">
@@ -61,6 +60,7 @@
                     </div>
                 </div>
             </div>
+
 
             <div class="form-group">
                 <label for="financing">Financing:</label>
@@ -74,16 +74,6 @@
 
             <div class="financing-section" id="financing-details" style="display: none;">
                 <h2>Financing Details</h2>
-
-                 <div class="form-group">
-                    <label for="loan-amount">Loan Amount:</label>
-                     <div class="input-group">
-                        <div class="input-group-prepend">
-                            <span class="input-group-text">$</span>
-                        </div>
-                    <input type="number" class="form-control" id="loan-amount" placeholder="Enter loan amount" min="0">
-                     </div>
-                </div>
 
                 <div class="form-group">
                     <label for="interest-rate">Interest Rate (%):</label>
@@ -111,11 +101,10 @@
 
         <div class="results-section" id="results" style="display: none;">
             <h2>Results</h2>
-            <div class="result-item"><strong>Total Cost Per Point:</strong> <span id="total-cost-per-point"></span></div>
-            <div class="result-item"><strong>Total Ownership Cost:</strong> <span id="total-ownership-cost"></span></div>
-            <div class="result-item"><strong>Total Purchase Cost (Loan Amount + Total Interest or Purchase Price):</strong> <span id="total-purchase-cost"></span></div>
-            <div class="result-item"><strong>Total Dues:</strong> <span id="total-dues"></span></div>
-             <div class="result-item" id="total-interest-container" style="display: none;"><strong>Total Interest:</strong> <span id="total-interest"></span></div>
+            <div class="result-item"><strong>Final Cost Per Point (Per Year):</strong> <span id="final-cost-per-point"></span></div>
+             <div class="result-item"><strong>Total Contract Cost (with Financing):</strong> <span id="total-contract-cost"></span></div>
+             <div class="result-item"><strong>Dues Cost Per Point (Per Year):</strong> <span id="dues-cost-per-point"></span></div>
+            <div class="result-item" id="total-interest-container" style="display: none;"><strong>Total Interest:</strong> <span id="total-interest"></span></div>
             <div class="result-item" id="monthly-payment-container" style="display: none;"><strong>Monthly Payment:</strong> <span id="monthly-payment"></span></div>
         </div>
     </div>
@@ -123,80 +112,63 @@
     <script>
         function calculateDVCCost() {
             // Get input values
-            const pricePerPoint = parseFloat(document.getElementById('price-per-point').value);
+            const totalContractPrice = parseFloat(document.getElementById('total-contract-price').value);
             const numPoints = parseInt(document.getElementById('num-points').value);
             const duesPerPoint = parseFloat(document.getElementById('dues-per-point').value);
             const contractLength = parseInt(document.getElementById('contract-length').value);
             const financing = document.getElementById('financing').value;
-
-              //Default the loan amount to the total purchase cost if no financing
-             let loanAmount = 0;
-              if (financing === "no") {
-                 loanAmount = pricePerPoint * numPoints;
-              }
-              else {
-                  loanAmount = parseFloat(document.getElementById('loan-amount').value);
-              }
-          
             const interestRate = (financing === 'yes') ? parseFloat(document.getElementById('interest-rate').value) / 100 : 0;
             const loanTerm = (financing === 'yes') ? parseInt(document.getElementById('loan-term').value) : 0;
 
-
-            // Input validation (same as before, but adding pricePerPoint)
-            if (isNaN(pricePerPoint) || pricePerPoint < 0) { alert("Please enter a valid price per point."); return; }
+            // Input validation
+            if (isNaN(totalContractPrice) || totalContractPrice < 0) { alert("Please enter a valid total contract price."); return; }
             if (isNaN(numPoints) || numPoints < 1) { alert("Please enter a valid number of points."); return; }
             if (isNaN(duesPerPoint) || duesPerPoint < 0) { alert("Please enter valid dues per point."); return; }
              if (isNaN(contractLength) || contractLength < 1) { alert("Please enter a valid contract length."); return;}
             if (financing === 'yes') {
-                if (isNaN(loanAmount) || loanAmount < 0) { alert("Please enter a valid loan amount."); return; }
                 if (isNaN(interestRate) || interestRate < 0) { alert("Please enter a valid interest rate."); return; }
                 if (isNaN(loanTerm) || loanTerm < 1) { alert("Please enter a valid loan term."); return; }
             }
 
             // Calculations
-             const totalDues = numPoints * duesPerPoint * contractLength;
-             let totalInterest = 0;
-             let monthlyPayment = 0;
-             let totalPurchaseCost = 0;
+            let totalInterest = 0;
+            let monthlyPayment = 0;
+            let finalContractCost = totalContractPrice; // Initialize with the base contract price
 
             if (financing === 'yes') {
                 const monthlyInterestRate = interestRate / 12;
                 const numPayments = loanTerm * 12;
+                if(interestRate > 0) {
+                    monthlyPayment = (totalContractPrice * monthlyInterestRate) / (1 - Math.pow(1 + monthlyInterestRate, -numPayments));
+                    totalInterest = (monthlyPayment * numPayments) - totalContractPrice;
+                    finalContractCost += totalInterest; // Add interest to get the final contract cost
 
-               if(interestRate > 0){
-                monthlyPayment = (loanAmount * monthlyInterestRate) / (1 - Math.pow(1 + monthlyInterestRate, -numPayments));
-                totalInterest = (monthlyPayment * numPayments) - loanAmount;
-                 totalPurchaseCost = loanAmount + totalInterest;
-               } else{
-                  monthlyPayment = loanAmount / numPayments; //Simple division for 0% interest.
-                  totalPurchaseCost = loanAmount;
-               }
+                } else {
+                     monthlyPayment = totalContractPrice / numPayments; // 0% interest
+                      finalContractCost = totalContractPrice;
+                }
+
 
                 document.getElementById('total-interest-container').style.display = 'block';
                 document.getElementById('monthly-payment-container').style.display = 'block';
                 document.getElementById('total-interest').textContent = `$${totalInterest.toFixed(2)}`;
                 document.getElementById('monthly-payment').textContent = `$${monthlyPayment.toFixed(2)}`;
-
             } else {
                 document.getElementById('total-interest-container').style.display = 'none';
                 document.getElementById('monthly-payment-container').style.display = 'none';
-                totalPurchaseCost = loanAmount; //If no financing
             }
-			
-			const totalOwnershipCost = totalPurchaseCost + totalDues;
-            const costPerPoint = totalOwnershipCost / numPoints;
-
+            const contractCostPerPointPerYear = finalContractCost/ contractLength / numPoints;
+            const finalCostPerPointPerYear = contractCostPerPointPerYear + duesPerPoint;
 
             // Display results
             document.getElementById('results').style.display = 'block';
-            document.getElementById('total-cost-per-point').textContent = `$${costPerPoint.toFixed(2)}`;
-             document.getElementById('total-ownership-cost').textContent = `$${totalOwnershipCost.toFixed(2)}`;
-            document.getElementById('total-purchase-cost').textContent = `$${totalPurchaseCost.toFixed(2)}`;
-            document.getElementById('total-dues').textContent = `$${totalDues.toFixed(2)}`;
+            document.getElementById('final-cost-per-point').textContent = `$${finalCostPerPointPerYear.toFixed(2)}`;
+             document.getElementById('total-contract-cost').textContent = `$${finalContractCost.toFixed(2)}`;
+             document.getElementById('dues-cost-per-point').textContent = `$${duesPerPoint.toFixed(2)}`;
 
         }
 
-
+         // Show/hide financing details based on dropdown selection
         document.getElementById('financing').addEventListener('change', function() {
             const financingDetails = document.getElementById('financing-details');
             if (this.value === 'yes') {
