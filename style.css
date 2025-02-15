@@ -1,0 +1,61 @@
+/* style.css */
+body {
+    font-family: sans-serif;
+    background-color: #f8f9fa; /* Light gray background */
+}
+
+.results-section {
+    background-color: #fff;
+    border: 1px solid #dee2e6;
+    border-radius: 0.25rem;
+    padding: 1rem;
+    margin-top: 1rem; /* Add some space above on mobile */
+}
+
+.result-amount {
+    font-size: 2.5rem;
+    font-weight: bold;
+    color: #007bff; /* Bootstrap primary color */
+    text-align: center;
+    margin-bottom: 1rem;
+}
+/* Style adjustments for the breakdown list */
+.results-section ul.list-group {
+  border: none; /* Remove the outer border */
+
+}
+
+.results-section .list-group-item {
+    background-color: transparent; /* Make list items transparent */
+    border: none;  /*Remove list item borders */
+    padding: 0.5rem 0; /* Reduce padding */
+    font-size: 1rem; /* Consistent font size */
+
+}
+
+.tax-breakdown {
+    margin-right: 0.5rem; /* Space between amount and percentage */
+    color: #212529;
+}
+
+.badge {
+    background-color: #6c757d; /* Muted gray */
+    color: white;
+}
+.btn-group .btn {
+     flex: 1; /* Make buttons fill the width */
+     border-radius: 0; /* Square edges */
+
+}
+ .btn-group .btn.active {
+    background-color: #007bff; /* Primary color for active button */
+    border-color: #007bff;
+    color: white;
+}
+.btn-secondary {
+    background-color: #e9ecef; /*Light Grey*/
+    border-color: #ced4da;
+}
+
+
+/* Responsive adjustments - no need for custom media queries, Bootstrap handles it */
