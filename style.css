@@ -59,5 +59,15 @@ body {
 }
 */
 
+/* Use Bootstrap's custom switch */
+.custom-switch .custom-control-label::before {
+    background-color: #e9ecef; /* Light gray for off state */
+    border-color: #ced4da;
+}
+
+.custom-switch .custom-control-input:checked ~ .custom-control-label::before {
+    background-color: #007bff; /* Bootstrap primary for on state */
+    border-color: #007bff;
+}
 
 /* Responsive adjustments - no need for custom media queries, Bootstrap handles it */

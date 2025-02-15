@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>DVC Cost Per Point Calculator</title>
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
-    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="style.css">  </link>
 </head>
 <body>
     <div class="container-fluid">
@@ -25,13 +25,11 @@
                         </div>
                     </div>
 
-                    <div class="form-group">
+                   <div class="form-group">
                         <label for="financing">Financing:</label>
-                        <div class="input-group">
-                          <select class="form-control" id="financing">
-                                <option value="no">No Financing</option>
-                                <option value="yes">Financing</option>
-                            </select>
+                        <div class="custom-control custom-switch">
+                            <input type="checkbox" class="custom-control-input" id="financing">
+                            <label class="custom-control-label" for="financing">Enable Financing</label>
                         </div>
                     </div>
 
@@ -135,9 +133,9 @@
       const numPoints = parseInt(document.getElementById('num-points').value);
       const duesPerPoint = parseCurrency(document.getElementById('dues-per-point').value);
       const contractLength = parseInt(document.getElementById('contract-length').value);
-      const financing = document.getElementById('financing').value;
-      const interestRate = (financing === 'yes') ? parseFloat(document.getElementById('interest-rate').value) / 100 : 0;
-      const loanTerm = (financing === 'yes') ? parseInt(document.getElementById('loan-term').value) : 0;
+      const financing = document.getElementById('financing').checked; // Use .checked for checkbox
+      const interestRate = (financing) ? parseFloat(document.getElementById('interest-rate').value) / 100 : 0; // Use boolean
+      const loanTerm = (financing) ? parseInt(document.getElementById('loan-term').value) : 0; // Use boolean
 
 
       // Input validation
@@ -145,7 +143,7 @@
       if (isNaN(numPoints) || numPoints < 1) { alert("Please enter a valid number of points."); return; }
       if (isNaN(duesPerPoint) || duesPerPoint < 0) { alert("Please enter valid dues per point."); return; }
        if (isNaN(contractLength) || contractLength < 1) { alert("Please enter a valid contract length."); return;}
-      if (financing === 'yes') {
+      if (financing) { //Simplified boolean check
           if (isNaN(interestRate) || interestRate < 0) { alert("Please enter a valid interest rate."); return; }
           if (isNaN(loanTerm) || loanTerm < 1) { alert("Please enter a valid loan term."); return; }
       }
@@ -157,7 +155,7 @@
         let contractCostPerPointPerYear = 0;
         let finalCostPerPointPerYear = 0;
 
-        if (financing === 'yes') {
+        if (financing) { //Simplified boolean check
             const monthlyInterestRate = interestRate / 12;
             const numPayments = loanTerm * 12;
 
@@ -182,14 +180,14 @@
         document.getElementById('final-cost-per-point').textContent = `$${formatCurrency(finalCostPerPointPerYear)}`;
         document.getElementById('total-contract-cost-breakdown').textContent = `$${formatCurrency(finalContractCost)}`;
         document.getElementById('dues-cost-per-point-breakdown').textContent = `$${formatCurrency(duesPerPoint)}`;
-         if(financing === 'yes'){
+         if(financing){ //Simplified boolean check
             document.getElementById('total-interest-breakdown').textContent = `$${formatCurrency(totalInterest)}`;
             document.getElementById('monthly-payment-breakdown').textContent = `$${formatCurrency(monthlyPayment)}`;
          }
 
 
         // Show/hide financing details and list items based on financing selection
-        if (financing === 'yes') {
+        if (financing) { // Simplified boolean check
             document.getElementById('financing-details').style.display = 'block';
             document.getElementById('total-interest-list-item').style.display = "flex";
             document.getElementById('monthly-payment-list-item').style.display = "flex";
@@ -200,15 +198,16 @@
         }
 
     }
-      // Event listener for financing dropdown change
-    document.getElementById('financing').addEventListener('change', function() {
-        const financingDetails = document.getElementById('financing-details');
-        if (this.value === 'yes') {
-            financingDetails.style.display = 'block';
-        } else {
-            financingDetails.style.display = 'none';
-        }
-    });
+
+      // Event listener for financing checkbox change
+        document.getElementById('financing').addEventListener('change', function() {
+            const financingDetails = document.getElementById('financing-details');
+            if (this.checked) {
+                financingDetails.style.display = 'block';
+            } else {
+                financingDetails.style.display = 'none';
+            }
+        });
 
 
       //Helper functions
