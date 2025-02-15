@@ -42,20 +42,22 @@ body {
     background-color: #6c757d; /* Muted gray */
     color: white;
 }
-.btn-group .btn {
-     flex: 1; /* Make buttons fill the width */
-     border-radius: 0; /* Square edges */
+/* No longer needed */
+/* .btn-group .btn {
+     flex: 1;
+     border-radius: 0;
 
 }
  .btn-group .btn.active {
-    background-color: #007bff; /* Primary color for active button */
+    background-color: #007bff;
     border-color: #007bff;
     color: white;
 }
 .btn-secondary {
-    background-color: #e9ecef; /*Light Grey*/
+    background-color: #e9ecef;
     border-color: #ced4da;
 }
+*/
 
 
 /* Responsive adjustments - no need for custom media queries, Bootstrap handles it */

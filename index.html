@@ -10,7 +10,7 @@
 <body>
     <div class="container-fluid">
       <h1 class="text-center my-4">DVC Cost Per Point Calculator</h1>
-        <p class="text-center">Calculates the cost per point, considering financing and annual dues, with a yearly cost breakdown.</p>
+        <p class="text-center">Calculates the cost per point, considering financing and annual dues.</p>
 
         <div class="row">
              <div class="col-md-8 col-lg-9 pr-lg-5">
@@ -94,10 +94,6 @@
 
               <div class="col-md-4 col-lg-3">
                 <div id="results" class="results-section">
-                    <div class="btn-group w-100 mb-3" role="group" aria-label="Time Period">
-                      <button type="button" class="btn btn-secondary active" id="btn-annual">Annual</button>
-                      <button type="button" class="btn btn-secondary" id="btn-monthly">Monthly</button>
-                  </div>
                     <h2>Your total cost per point based on contract cost of <span id="display-total-contract-cost">$0</span> is:</h2>
                     <div class="result-amount" id="final-cost-per-point">$0</div>
                    <ul class="list-group mt-4">
@@ -180,10 +176,17 @@
 
        finalCostPerPointPerYear = contractCostPerPointPerYear + duesPerPoint;
 
-        // Display results, handling annual/monthly view
+        // Display results
         document.getElementById('results').style.display = 'block';
         document.getElementById('display-total-contract-cost').textContent = `$${formatCurrency(totalContractPrice)}`;
-        showAnnualResults(); // Default to annual view
+        document.getElementById('final-cost-per-point').textContent = `$${formatCurrency(finalCostPerPointPerYear)}`;
+        document.getElementById('total-contract-cost-breakdown').textContent = `$${formatCurrency(finalContractCost)}`;
+        document.getElementById('dues-cost-per-point-breakdown').textContent = `$${formatCurrency(duesPerPoint)}`;
+         if(financing === 'yes'){
+            document.getElementById('total-interest-breakdown').textContent = `$${formatCurrency(totalInterest)}`;
+            document.getElementById('monthly-payment-breakdown').textContent = `$${formatCurrency(monthlyPayment)}`;
+         }
+
 
         // Show/hide financing details and list items based on financing selection
         if (financing === 'yes') {
@@ -195,45 +198,6 @@
             document.getElementById('total-interest-list-item').style.display = "none";
             document.getElementById('monthly-payment-list-item').style.display = "none";
         }
-
-
-
-          // Event listeners for annual/monthly buttons
-        document.getElementById('btn-annual').addEventListener('click', showAnnualResults);
-        document.getElementById('btn-monthly').addEventListener('click', showMonthlyResults);
-
-
-        function showAnnualResults() {
-          // Set active button
-          document.getElementById('btn-annual').classList.add('active');
-          document.getElementById('btn-monthly').classList.remove('active');
-
-          // Update display for annual values
-          document.getElementById('final-cost-per-point').textContent = `$${formatCurrency(finalCostPerPointPerYear)}`;
-          document.getElementById('total-contract-cost-breakdown').textContent = `$${formatCurrency(finalContractCost)}`;
-          document.getElementById('dues-cost-per-point-breakdown').textContent = `$${formatCurrency(duesPerPoint)}`;
-           if(financing === 'yes'){
-              document.getElementById('total-interest-breakdown').textContent = `$${formatCurrency(totalInterest)}`;
-              document.getElementById('monthly-payment-breakdown').textContent = `$${formatCurrency(monthlyPayment)}`;
-           }
-
-        }
-
-
-      function showMonthlyResults() {
-          // Set active button
-          document.getElementById('btn-monthly').classList.add('active');
-          document.getElementById('btn-annual').classList.remove('active');
-
-          // Calculate and update display for monthly values
-          document.getElementById('final-cost-per-point').textContent = `$${formatCurrency(finalCostPerPointPerYear / 12)}`;
-          document.getElementById('total-contract-cost-breakdown').textContent = `$${formatCurrency(finalContractCost / 12)}`;
-          document.getElementById('dues-cost-per-point-breakdown').textContent = `$${formatCurrency(duesPerPoint / 12)}`;
-          if(financing === 'yes'){
-              document.getElementById('total-interest-breakdown').textContent = `$${formatCurrency(totalInterest/ (loanTerm * 12))}`; // Monthly interest
-              document.getElementById('monthly-payment-breakdown').textContent = `$${formatCurrency(monthlyPayment)}`; // Already monthly
-          }
-      }
 
     }
       // Event listener for financing dropdown change
