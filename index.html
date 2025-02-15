@@ -6,7 +6,7 @@
     <title>DVC Cost Per Point Calculator</title>
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
     <link rel="stylesheet" href="style.css">
-    </head>
+</head>
 <body>
     <div class="container-fluid">
       <h1 class="text-center my-4">DVC Cost Per Point Calculator</h1>
@@ -24,37 +24,6 @@
                             <input type="text" class="form-control" id="total-contract-price" placeholder="Enter total contract price" required>
                         </div>
                     </div>
-
-                    <div class="form-group">
-                        <label for="num-points">Number of Points:</label>
-                        <div class="input-group">
-                          <input type="number" class="form-control" id="num-points" placeholder="Enter number of points" required min="1">
-                            <div class="input-group-append">
-                                <span class="input-group-text">points</span>
-                            </div>
-                        </div>
-                    </div>
-
-                    <div class="form-group">
-                        <label for="dues-per-point">Yearly Dues per Point:</label>
-                        <div class="input-group">
-                          <div class="input-group-prepend">
-                            <span class="input-group-text">$</span>
-                        </div>
-                        <input type="text" class="form-control" id="dues-per-point" placeholder="Enter dues per point" required>
-                        </div>
-                    </div>
-
-                    <div class="form-group">
-                        <label for="contract-length">Contract Length (Years):</label>
-                        <div class="input-group">
-                          <input type="number" class="form-control" id="contract-length" placeholder="Enter contract length in years" required min="1">
-                            <div class="input-group-append">
-                                <span class="input-group-text">years</span>
-                            </div>
-                        </div>
-                    </div>
-
 
                     <div class="form-group">
                         <label for="financing">Financing:</label>
@@ -90,6 +59,35 @@
                         </div>
                     </div>
 
+                    <div class="form-group">
+                        <label for="num-points">Number of Points:</label>
+                        <div class="input-group">
+                          <input type="number" class="form-control" id="num-points" placeholder="Enter number of points" required min="1">
+                            <div class="input-group-append">
+                                <span class="input-group-text">points</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="dues-per-point">Yearly Dues per Point:</label>
+                        <div class="input-group">
+                          <div class="input-group-prepend">
+                            <span class="input-group-text">$</span>
+                        </div>
+                        <input type="text" class="form-control" id="dues-per-point" placeholder="Enter dues per point" required>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="contract-length">Contract Length (Years):</label>
+                        <div class="input-group">
+                          <input type="number" class="form-control" id="contract-length" placeholder="Enter contract length in years" required min="1">
+                            <div class="input-group-append">
+                                <span class="input-group-text">years</span>
+                            </div>
+                        </div>
+                    </div>
                     <button type="button" class="btn btn-primary" onclick="calculateDVCCost()">Calculate</button>
                 </form>
             </div>
