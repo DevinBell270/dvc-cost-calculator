@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>DVC Cost Per Point Calculator</title>
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
-    <link rel="stylesheet" href="style.css">  </link>
+    <link rel="stylesheet" href="style.css">
 </head>
 <body>
     <div class="container-fluid">
@@ -77,15 +77,17 @@
                         </div>
                     </div>
 
-                    <div class="form-group">
-                        <label for="contract-length">Contract Length (Years):</label>
+                   <div class="form-group">
+                        <label for="contract-expiration-year">Contract Expiration Year:</label>
                         <div class="input-group">
-                          <input type="number" class="form-control" id="contract-length" placeholder="Enter contract length in years" required min="1">
+                            <input type="number" class="form-control" id="contract-expiration-year" placeholder="Enter expiration year" required min="1900">
                             <div class="input-group-append">
-                                <span class="input-group-text">years</span>
+                                <span class="input-group-text">year</span>
                             </div>
                         </div>
                     </div>
+
+
                     <button type="button" class="btn btn-primary" onclick="calculateDVCCost()">Calculate</button>
                 </form>
             </div>
@@ -132,18 +134,36 @@
       const totalContractPrice = parseCurrency(document.getElementById('total-contract-price').value);
       const numPoints = parseInt(document.getElementById('num-points').value);
       const duesPerPoint = parseCurrency(document.getElementById('dues-per-point').value);
-      const contractLength = parseInt(document.getElementById('contract-length').value);
-      const financing = document.getElementById('financing').checked; // Use .checked for checkbox
-      const interestRate = (financing) ? parseFloat(document.getElementById('interest-rate').value) / 100 : 0; // Use boolean
-      const loanTerm = (financing) ? parseInt(document.getElementById('loan-term').value) : 0; // Use boolean
+      const contractExpirationYear = parseInt(document.getElementById('contract-expiration-year').value);
+      const today = new Date();
+      const contractLength = contractExpirationYear - today.getFullYear();
+      const financing = document.getElementById('financing').checked;
+      const interestRate = (financing) ? parseFloat(document.getElementById('interest-rate').value) / 100 : 0;
+      const loanTerm = (financing) ? parseInt(document.getElementById('loan-term').value) : 0;
 
 
       // Input validation
-      if (isNaN(totalContractPrice) || totalContractPrice < 0) { alert("Please enter a valid total contract price."); return; }
-      if (isNaN(numPoints) || numPoints < 1) { alert("Please enter a valid number of points."); return; }
-      if (isNaN(duesPerPoint) || duesPerPoint < 0) { alert("Please enter valid dues per point."); return; }
-       if (isNaN(contractLength) || contractLength < 1) { alert("Please enter a valid contract length."); return;}
-      if (financing) { //Simplified boolean check
+      if (isNaN(totalContractPrice) || totalContractPrice < 0) {
+        alert("Please enter a valid total contract price.");
+        return;
+    }
+    if (isNaN(numPoints) || numPoints < 1) {
+        alert("Please enter a valid number of points.");
+        return;
+    }
+    if (isNaN(duesPerPoint) || duesPerPoint < 0) {
+        alert("Please enter valid dues per point.");
+        return;
+    }
+    if (isNaN(contractExpirationYear) || contractExpirationYear < 1900) {
+        alert("Please enter a valid contract expiration year.");
+        return;
+    }
+      if (contractLength < 0) {
+          alert("Contract expiration year must be in the future.");
+        return;
+    }
+      if (financing) {
           if (isNaN(interestRate) || interestRate < 0) { alert("Please enter a valid interest rate."); return; }
           if (isNaN(loanTerm) || loanTerm < 1) { alert("Please enter a valid loan term."); return; }
       }
@@ -155,7 +175,7 @@
         let contractCostPerPointPerYear = 0;
         let finalCostPerPointPerYear = 0;
 
-        if (financing) { //Simplified boolean check
+        if (financing) {
             const monthlyInterestRate = interestRate / 12;
             const numPayments = loanTerm * 12;
 
@@ -180,14 +200,14 @@
         document.getElementById('final-cost-per-point').textContent = `$${formatCurrency(finalCostPerPointPerYear)}`;
         document.getElementById('total-contract-cost-breakdown').textContent = `$${formatCurrency(finalContractCost)}`;
         document.getElementById('dues-cost-per-point-breakdown').textContent = `$${formatCurrency(duesPerPoint)}`;
-         if(financing){ //Simplified boolean check
+         if(financing){
             document.getElementById('total-interest-breakdown').textContent = `$${formatCurrency(totalInterest)}`;
             document.getElementById('monthly-payment-breakdown').textContent = `$${formatCurrency(monthlyPayment)}`;
          }
 
 
         // Show/hide financing details and list items based on financing selection
-        if (financing) { // Simplified boolean check
+        if (financing) {
             document.getElementById('financing-details').style.display = 'block';
             document.getElementById('total-interest-list-item').style.display = "flex";
             document.getElementById('monthly-payment-list-item').style.display = "flex";
