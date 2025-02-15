@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>DVC Cost Per Point Calculator</title>
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
-    <link rel="stylesheet" href="style.css">  </link>
+    <link rel="stylesheet" href="style.css">
     </head>
 <body>
     <div class="container-fluid">
@@ -187,19 +187,17 @@
         document.getElementById('display-total-contract-cost').textContent = `$${formatCurrency(totalContractPrice)}`;
         showAnnualResults(); // Default to annual view
 
-         // Show/hide financing details based on dropdown selection
-        document.getElementById('financing').addEventListener('change', function() {
-            const financingDetails = document.getElementById('financing-details');
-            if (this.value === 'yes') {
-                financingDetails.style.display = 'block';
-                document.getElementById('total-interest-list-item').style.display = "flex";
-                document.getElementById('monthly-payment-list-item').style.display = "flex";
-            } else {
-                financingDetails.style.display = 'none';
-                 document.getElementById('total-interest-list-item').style.display = "none";
-                  document.getElementById('monthly-payment-list-item').style.display = "none";
-            }
-        });
+        // Show/hide financing details and list items based on financing selection
+        if (financing === 'yes') {
+            document.getElementById('financing-details').style.display = 'block';
+            document.getElementById('total-interest-list-item').style.display = "flex";
+            document.getElementById('monthly-payment-list-item').style.display = "flex";
+        } else {
+            document.getElementById('financing-details').style.display = 'none';
+            document.getElementById('total-interest-list-item').style.display = "none";
+            document.getElementById('monthly-payment-list-item').style.display = "none";
+        }
+
 
 
           // Event listeners for annual/monthly buttons
@@ -240,6 +238,16 @@
       }
 
     }
+      // Event listener for financing dropdown change
+    document.getElementById('financing').addEventListener('change', function() {
+        const financingDetails = document.getElementById('financing-details');
+        if (this.value === 'yes') {
+            financingDetails.style.display = 'block';
+        } else {
+            financingDetails.style.display = 'none';
+        }
+    });
+
 
       //Helper functions
       function parseCurrency(value) {
