@@ -34,31 +34,41 @@
         <p class="text-center">Calculates the cost per point, considering financing and annual dues.</p>
 
         <div class="row">
-             <div class="col-md-8 col-lg-9 pe-lg-5">  <form id="dvc-calculator-form">
-                    <div class="mb-3">  <label for="total-contract-price" class="form-label">Total Contract Price:</label> <div class="input-group">
-                            <span class="input-group-text">$</span> <input type="text" class="form-control" id="total-contract-price" placeholder="Enter total contract price" required>
+             <div class="col-md-8 col-lg-9 pe-lg-5">
+                <form id="dvc-calculator-form">
+                    <div class="mb-3">
+                        <label for="total-contract-price" class="form-label">Total Contract Price:</label>
+                        <div class="input-group">
+                            <span class="input-group-text">$</span>
+                            <input type="text" class="form-control" id="total-contract-price" placeholder="Enter total contract price" required>
                         </div>
                     </div>
 
                    <div class="mb-3">
                         <label for="financing" class="form-label">Financing:</label>
-                        <div class="form-check form-switch"> <input type="checkbox" class="form-check-input" id="financing">  <label class="form-check-label" for="financing">Enable Financing</label> </div>
+                        <div class="form-check form-switch">
+                            <input type="checkbox" class="form-check-input" id="financing">
+                            <label class="form-check-label" for="financing">Enable Financing</label>
+                        </div>
                     </div>
 
                     <div class="financing-section" id="financing-details" style="display: none;">
                         <h2>Financing Details</h2>
-                        <div class="mb-3">
+                        <div class="row">  <div class="col-md-6 mb-3">
                             <label for="interest-rate" class="form-label">Interest Rate (%):</label>
                             <div class="input-group">
                               <input type="number" class="form-control" id="interest-rate" placeholder="Enter interest rate" min="0" step="0.01">
-                              <span class="input-group-text">%</span> </div>
+                              <span class="input-group-text">%</span>
+                            </div>
                         </div>
 
-                        <div class="mb-3">
+                        <div class="col-md-6 mb-3">
                             <label for="loan-term" class="form-label">Loan Term (Years):</label>
                             <div class="input-group">
                               <input type="number" class="form-control" id="loan-term" placeholder="Enter loan term" min="1">
-                              <span class="input-group-text">years</span> </div>
+                              <span class="input-group-text">years</span>
+                            </div>
+                        </div>
                         </div>
                     </div>
 
@@ -66,13 +76,15 @@
                         <label for="num-points" class="form-label">Number of Points:</label>
                         <div class="input-group">
                           <input type="number" class="form-control" id="num-points" placeholder="Enter number of points" required min="1">
-                            <span class="input-group-text">points</span> </div>
+                            <span class="input-group-text">points</span>
+                        </div>
                     </div>
 
                     <div class="mb-3">
                         <label for="dues-per-point" class="form-label">Yearly Dues per Point:</label>
                         <div class="input-group">
-                          <span class="input-group-text">$</span> <input type="text" class="form-control" id="dues-per-point" placeholder="Enter dues per point" required>
+                          <span class="input-group-text">$</span>
+                          <input type="text" class="form-control" id="dues-per-point" placeholder="Enter dues per point" required>
                         </div>
                     </div>
 
@@ -80,7 +92,8 @@
                         <label for="contract-expiration-year" class="form-label">Contract Expiration Year:</label>
                         <div class="input-group">
                             <input type="number" class="form-control" id="contract-expiration-year" placeholder="Enter expiration year" required min="1900">
-                            <span class="input-group-text">year</span> </div>
+                            <span class="input-group-text">year</span>
+                        </div>
                     </div>
 
 
